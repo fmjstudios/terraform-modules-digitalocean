@@ -1,0 +1,35 @@
+{
+  "Id": ""${id}"",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowRead",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "s3:GetObject",
+      "Resource": [
+        "arn:aws:s3:::"${domain}"",
+        "arn:aws:s3:::"${domain}"/*"
+      ]
+    },
+    {
+      "Sid": "IPBasedNarrowFurther",
+      "Effect": "Deny",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "s3:GetObject",
+      "Resource": [
+        "arn:aws:s3:::cdn.delta4x4.net",
+        "arn:aws:s3:::cdn.delta4x4.net/*"
+      ],
+      "Condition": {
+        "NotIpAddress": {
+          "aws:SourceIp": "${allowed_ips}""
+        }
+      }
+    }
+  ]
+}
